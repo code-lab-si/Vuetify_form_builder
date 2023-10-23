@@ -1,0 +1,10 @@
+
+.dnd_duplicate {
+    width: 300px;
+    user-select: none;
+    border: 3px solid green;
+    border-radius: 5px;
+    position: absolute;
+    background-color: white;
+    padding: 3px 10px;
+}
