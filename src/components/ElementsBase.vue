@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { v4 as uuid } from 'uuid';
 import { onMounted } from 'vue';
+import { useTheStore } from '../stores/store';
 
+const store = useTheStore();
 const id = uuid();
 
 let dndDuplicate: HTMLElement;
@@ -15,7 +17,6 @@ const createDuplicate = () => {
   dndDuplicate = document.createElement('div');
   dndDuplicate.className = 'dnd_duplicate';
   dndDuplicate.innerHTML = document.getElementById(id)?.innerHTML ?? '';
-  console.log(rootElement);
   rootElement?.appendChild(dndDuplicate);
 };
 
@@ -46,12 +47,14 @@ const positionDuplicateEl = (e: MouseEvent) => {
 };
 
 const dragStart = (e: MouseEvent) => {
+  store.setDragging(true);
   disableSelect();
   createDuplicate();
   positionDuplicateEl(e);
   followMouse();
 };
 const dragEnd = () => {
+  store.setDragging(false);
   removeDuplicate();
   enableSelect();
   document.removeEventListener('mousemove', positionDuplicateEl);

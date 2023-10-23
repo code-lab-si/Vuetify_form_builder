@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import TheFormDropzone from './TheFormDropzone.vue';
+</script>
 
 <template>
   <v-row>
@@ -6,7 +8,9 @@
       <v-card>
         <template v-slot:title> {{ $t('titles.form') }} </template>
 
-        <template v-slot:text> This is content </template>
+        <template v-slot:text>
+          <TheFormDropzone />
+        </template>
       </v-card>
     </v-col>
   </v-row>

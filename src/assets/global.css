@@ -1,5 +1,6 @@
 
 .dnd_duplicate {
+    pointer-events: none;
     width: 300px;
     user-select: none;
     border: 3px solid green;

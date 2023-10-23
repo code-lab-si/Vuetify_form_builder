@@ -19,4 +19,5 @@ export default {
   radio_one: 'Radio one',
   radio_two: 'Radio two',
   radio_three: 'Radio three',
+  drop_elements_here: 'Drop elements here',
 };
