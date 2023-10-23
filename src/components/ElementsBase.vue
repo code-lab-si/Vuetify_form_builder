@@ -1,18 +1,34 @@
 <script setup lang="ts">
 import { v4 as uuid } from 'uuid';
+import { onMounted } from 'vue';
 
 const id = uuid();
 
 let dndDuplicate: HTMLElement;
+let rootElement: HTMLElement | null = null;
 
-const createDuplicate = (e: MouseEvent) => {
+onMounted(() => {
+  rootElement = document.getElementById('the_form_builder');
+});
+
+const createDuplicate = () => {
   dndDuplicate = document.createElement('div');
   dndDuplicate.className = 'dnd_duplicate';
   dndDuplicate.innerHTML = document.getElementById(id)?.innerHTML ?? '';
-  document.getElementById('the_form_builder')?.appendChild(dndDuplicate);
-  positionDuplicate(e);
+  console.log(rootElement);
+  rootElement?.appendChild(dndDuplicate);
+};
 
-  followMouse();
+const disableSelect = () => {
+  if (rootElement) {
+    rootElement.style.userSelect = 'none';
+  }
+};
+
+const enableSelect = () => {
+  if (rootElement) {
+    rootElement.style.userSelect = 'initial';
+  }
 };
 
 const removeDuplicate = () => {
@@ -20,26 +36,31 @@ const removeDuplicate = () => {
 };
 
 const followMouse = () => {
-  document.addEventListener('mousemove', positionDuplicate);
+  document.addEventListener('mousemove', positionDuplicateEl);
+  document.addEventListener('mouseup', dragEnd);
 };
 
-const positionDuplicate = (e: MouseEvent) => {
+const positionDuplicateEl = (e: MouseEvent) => {
   dndDuplicate.style.left = `${e.clientX - dndDuplicate.offsetWidth / 2}px`;
   dndDuplicate.style.top = `${e.clientY - dndDuplicate.offsetHeight / 2}px`;
 };
 
-const dragStart = (e: any) => {
-  // e.preventDefault();
-  createDuplicate(e);
+const dragStart = (e: MouseEvent) => {
+  disableSelect();
+  createDuplicate();
+  positionDuplicateEl(e);
+  followMouse();
 };
-const dragEnd = (e: any) => {
+const dragEnd = () => {
   removeDuplicate();
-  document.removeEventListener('mousemove', positionDuplicate);
+  enableSelect();
+  document.removeEventListener('mousemove', positionDuplicateEl);
+  document.removeEventListener('mouseup', dragEnd);
 };
 </script>
 
 <template>
-  <v-card :id="id" class="px-4 mb-2" @mousedown="dragStart" @mouseup="dragEnd">
+  <v-card :id="id" class="px-4 mb-2" @mousedown="dragStart">
     <div style="user-select: none">
       <slot></slot>
     </div>
